@@ -1,0 +1,56 @@
+using System.Data;
+using System.Data.SqlClient;
+
+namespace BiometricSystem
+{
+    public partial class frmEmployee : Form
+    {
+        public string insertQuery = "";
+        public SqlCommand command;
+        public SqlDataAdapter adapter = new SqlDataAdapter();
+        public frmEmployee()
+        {
+            InitializeComponent();
+        }
+
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            dbAccess DbAccess = new dbAccess();
+            DbAccess.createConn();
+
+            insertQuery = "Insert into Employee_Data (EmployeeID, Name, Position) values(@IdNo, @Name, @Position)";
+            command = new SqlCommand(insertQuery);
+
+            if (string.IsNullOrWhiteSpace(txtIDNo.Text) & string.IsNullOrWhiteSpace(txtName.Text) & cmbPosition.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please Input all data required!");
+            }
+            else if (string.IsNullOrWhiteSpace(txtIDNo.Text))
+            {
+                MessageBox.Show("Please Enter ID No.");
+            }
+            else if (string.IsNullOrWhiteSpace(txtName.Text))
+            {
+                MessageBox.Show("Please Enter Name!");
+            }
+            else if (cmbPosition.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please Enter Position!");
+            }
+            else
+            {
+                command.Parameters.AddWithValue("@IdNo", int.Parse(txtIDNo.Text));
+                command.Parameters.AddWithValue("@Name", txtName.Text);
+                command.Parameters.AddWithValue("@Position", cmbPosition.Text);
+                DbAccess.executeQuery(command);
+                MessageBox.Show("Successfully Added!");
+            }
+        }
+    }
+}
