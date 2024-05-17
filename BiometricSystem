@@ -51,6 +51,7 @@ namespace BiometricSystem
                 DbAccess.executeQuery(command);
                 MessageBox.Show("Successfully Added!");
             }
+            _dbAccess.closeConn();
         }
     }
 }
